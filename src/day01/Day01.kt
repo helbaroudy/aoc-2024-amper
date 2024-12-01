@@ -9,7 +9,7 @@ const val DELIMITER = "   "
 fun main() {
     fun part1(input: List<String>): Int {
         val right = input.map { it.split(DELIMITER)[0].toInt() }.sorted()
-        val left  = input.map { it.split(DELIMITER)[1].toInt() }.sorted()
+        val left = input.map { it.split(DELIMITER)[1].toInt() }.sorted()
 
         return right.mapIndexed { index, value ->
             abs(value - left[index])
@@ -17,12 +17,16 @@ fun main() {
     }
 
     fun part2(input: List<String>): Int {
-        return input.size
+        val left = input.map { it.split(DELIMITER)[1].toInt() }
+        return input.map { it.split(DELIMITER)[0].toInt() }
+            .map { num -> num to left.count { it == num } }
+            .sumOf { it.first * it.second }
     }
 
     // Or read a large test input from the `src/Day01_test.txt` file:
     val testInput = readInput("Day01_test")
     check(part1(testInput) == 11)
+    check(part2(testInput) == 31)
 
     // Read the input from the `src/Day01.txt` file.
     val input = readInput("Day01")
