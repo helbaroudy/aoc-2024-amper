@@ -2,7 +2,6 @@ package day03
 
 import println
 import readInput
-import kotlin.math.abs
 
 fun main() {
 
@@ -21,8 +20,35 @@ fun main() {
         }
     }
 
+    fun part2Fail(input: List<String>): Int { //Failing too low
+        val regexBorders = Regex("(don\\'t\\(\\))(.*)(do\\(\\))")
+        val sanitizedInput = input.map {
+            it.replace(regexBorders, "")
+        }
+        return part1(sanitizedInput)
+    }
+
     fun part2(input: List<String>): Int {
-        return 0
+        val regex = Regex("mul\\(\\d{1,3},\\d{1,3}\\)|(don\\'t\\(\\))|(do\\(\\))")
+        var enabled = true
+        var result = 0
+        input.forEach { entry ->
+            regex
+                .findAll(entry)
+                .map { it.value }
+                .forEach {
+                    if (it == "don't()") enabled = false
+                    if (it == "do()") enabled = true
+                    if (enabled && it.startsWith("mul")) {
+                        val operands = it
+                            .replace("mul(", "")
+                            .replace(")", "")
+                            .split(",").map { it.toInt() }
+                        result += operands[0] * operands[1]
+                    }
+                }
+        }
+        return result
     }
 
 
