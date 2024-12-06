@@ -2,22 +2,36 @@ package day02
 
 import println
 import readInput
+import kotlin.math.abs
 
 fun main() {
-    fun part1(input: List<String>): Int {
-        return input.size
+    fun isSafe(report: List<Int>): Boolean {
+        var increasing = false
+        var decreasing = false
+        for (index in 1 until report.size) {
+            val difference = report[index - 1] - report[index]
+            if (abs(difference) !in 1..3) return false
+            if (difference > 0) increasing = true
+            if (difference < 0) decreasing = true
+            if (decreasing && increasing) return false
+        }
+        return true
     }
+
+    fun part1(input: List<String>): Int =
+        input
+            .map { report -> report.split(" ").map(String::toInt) }
+            .count(::isSafe)
+
 
     fun part2(input: List<String>): Int {
         return input.size
     }
 
-    // Or read a large test input from the `src/Day01_test.txt` file:
-    val testInput = readInput("Day01_test")
-    check(part1(testInput) == 1)
+    val testInput = readInput("day02/input_test")
+    check(part1(testInput) == 2)
 
-    // Read the input from the `src/Day01.txt` file.
-    val input = readInput("Day01")
+    val input = readInput("day02/input")
     part1(input).println()
     part2(input).println()
 }
